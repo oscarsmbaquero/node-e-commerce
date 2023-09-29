@@ -5,6 +5,7 @@ import { httpStatusCode } from "../../utils/httpStatusCode.js";
 
 
 const loginUser = async (req, res, next)=>{
+  console.log('Entro');
     try {
             const { body } = req;
             console.log(body,60);

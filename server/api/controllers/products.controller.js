@@ -6,7 +6,7 @@ import { ObjectId } from "mongodb";
 
 
 const getProducts = async (req, res, next) => {
-  console.log('Entro');
+  console.log('Entroxxxxxxxxxxxxx');
   try {
     const products = await Products.find();
     // .populate({ path: "materialIntervencion",select: "descripcion"})
