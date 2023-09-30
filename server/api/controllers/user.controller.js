@@ -1,79 +1,72 @@
 import { User } from "../models/User.Model.js";
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { httpStatusCode } from "../../utils/httpStatusCode.js";
 
+const loginUser = async (req, res, next) => {
+  console.log("Entro");
+  try {
+    const { body } = req;
+    console.log(body.password, 60);
+    // Comprobar email
+    const user = await User.findOne({ user: body.user });
+    console.log(user, 63);
 
-const loginUser = async (req, res, next)=>{
-  console.log('Entro');
-    try {
-            const { body } = req;
-            console.log(body,60);
-            // Comprobar email
-            const user = await User.findOne({ user: body.user });
-            console.log(user,63);
-        
-            // Comprobar password
-            const isValidPassword = await bcrypt.compare(body.password, user?.password ?? '');
-            console.log(isValidPassword,67,'sigo')
-            // Control de LOGIN
-            // if (!user || !isValidPassword) {
-            //   const error = {
-            //     status: 401,
-            //     message: 'The email & password combination is incorrect!'
-            //   };
-            //   return next(error);
-            // }
-        
-            // TOKEN JWT
-            // const token = jwt.sign(
-            //   {
-            //     id: user._id,
-            //     user: user.user,
-            //   },
-            //   req.app.get("secretKey"),
-            //   { expiresIn: "1h" }
-            // );
-        
-            // Response
-            return res.json({
-            //   status: 200,
-            //   message: httpStatusCode[200],
-            //   data: {
-                // id: user._id,
-                user: user.user,
-                //token: token,
-                
-            //   },
-            });
-          } catch (error) {
-            console.log(error);
-            return next(error);
-          }
-  
-  
-  };
-  const logoutUser = async (req, res, next) => {
-  
-    try {
-      req.authority = null;
-      return res.json({
-        status: 200,
-        message: 'logged out',
-        token: null
-      })
-    } catch (error) {
-      next(error)
+    // Comprobar password
+    const isValidPassword = await bcrypt.compare(body.password, user.password);
+    // Control de LOGIN
+    if (!user || !isValidPassword) {
+      const error = {
+        status: 401,
+        message: "The email & password combination is incorrect!",
+      };
+      return next(error);
     }
-  };
 
+    // TOKEN JWT
+    const token = jwt.sign(
+      {
+        id: user._id,
+        user: user.user,
+      },
+      req.app.get("secretKey"),
+      { expiresIn: "1h" }
+    );
+
+    // Response
+    return res.json({
+      status: 200,
+      message: httpStatusCode[200],
+      data: {
+        id: user._id,
+        user: user.user,
+        token: token,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return next(error);
+  }
+};
+const logoutUser = async (req, res, next) => {
+  try {
+    req.authority = null;
+    return res.json({
+      status: 200,
+      message: "logged out",
+      token: null,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 // const getUsers = async (req,res,next) =>{
 //   try {
 //       const users = await User.find();
 //       return res.status(200).json(users);
 //   } catch (error) {
-//       return next(error)        
+//       return next(error)
 //   }
 // };
 
@@ -95,14 +88,14 @@ const loginUser = async (req, res, next)=>{
 // };
 
 // const editUser = async (req, res, next) => {
- 
+
 //   const userPhoto = req.file_url;// me traigo la url de la foto
 //   //console.log(userPhoto,37);
 //   const bodyData = req.body;
 
 //   if (userPhoto) { bodyData.image = userPhoto }
 //   const { id: userId } = req.authority;
-  
+
 //   try {
 //     const user = await User.findById(userId)
 //     const userModify = new User(bodyData);
@@ -113,7 +106,7 @@ const loginUser = async (req, res, next)=>{
 //     //buscamos por el id y le pasamos los campos a modificar
 //     await User.findByIdAndUpdate(userId, userModify);
 
-//     //retornamos respuesta de  los datos del objeto creado 
+//     //retornamos respuesta de  los datos del objeto creado
 //     return res.json({
 //       status: 200,
 //       message: httpStatusCode[200],
@@ -124,57 +117,53 @@ const loginUser = async (req, res, next)=>{
 //   }
 // };
 
-// const  registerUser = async(req, res, next) =>{
-//   try {
-//     const { body } = req;
-//     console.log('Entro');
-//     // Comprobar usuario
-//     const previousUser = await User.findOne({ email: body.email });
+const registerUser = async (req, res, next) => {
+  try {
+    const { body } = req;
+    console.log("Entro", body.mail);
+    // Comprobar usuario
+    const previousUser = await User.findOne({ mail: body.mail });
+    console.log(previousUser, "previousUser");
+    if (previousUser) {
+      console.log("Ya existe el usuario");
+      const error = new Error("The user is already registered!");
+      return next(error);
+    }
 
-//     if (previousUser) {
-//       const error = new Error('The user is already registered!');
-//       return next(error);
-//     }
+    // Encriptar password
+    const pwdHash = await bcrypt.hash(body.password, 10);
+    console.log(pwdHash, "pwdHAsh");
+    // Crear usuario en DB
+    const newUser = new User({
+      user: body.user,
+      tlf: body.tlf,
+      mail: body.mail,
+      password: pwdHash,
+    });
+    console.log(newUser, "newUser");
 
-//     // Encriptar password
-//     const pwdHash = await bcrypt.hash(body.password, 10);
+    const savedUser = await newUser.save();
+    console.log(savedUser, "saveUser");
 
-//     // Crear usuario en DB
-//     const newUser = new User({
-//       name: body.name,
-//       surname: body.surname,
-//       email: body.email,
-//       password: pwdHash,
-//     });
-//     const savedUser = await newUser.save();
-
-//     // Respuesta
-//     return res.status(201).json({
-//       status: 201,
-//       message: httpStatusCode[201],
-//       data: {
-//         id: savedUser._id
-//       }
-//     });
-
-//   } catch (error) {
-//     return next(error);
-//   }
-// };
-
-
-
-
+    // Respuesta
+    return res.status(201).json({
+      status: 201,
+      message: httpStatusCode[201],
+      data: {
+        id: savedUser._id,
+      },
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
 
 // const assignAviso = ('/', async (req, res, next) => {
-  
-  
-//   const { userId, avisoId, estado } = req.body;
 
+//   const { userId, avisoId, estado } = req.body;
 
 //   try {
 
-   
 //     const estadoModify = await Avisos.findByIdAndUpdate(
 //       avisoId,
 //       {estado:estado}
@@ -193,19 +182,17 @@ const loginUser = async (req, res, next)=>{
 // } catch (error) {
 //     return next(error);
 
-
 // }
 // })
 // const reAssignAviso = ('/', async (req, res, next) => {
 //   const { userId, estado, avisoId, idUserOld } = req.body;
-  
+
 //  try {
-    
 
 //   const estadoModify = await Avisos.findByIdAndUpdate(
 //     avisoId,
 //     {estado:estado,
-//      user_assigned:userId 
+//      user_assigned:userId
 //     }
 //  );
 
@@ -219,7 +206,7 @@ const loginUser = async (req, res, next)=>{
 //     { $push: { assigned_avisos: avisoId } },
 //     { new: true }
 // );
- 
+
 //     return res.status(200).json(estadoModify);
 //   } catch (error) {
 //     return next(error);
@@ -234,7 +221,6 @@ const loginUser = async (req, res, next)=>{
 //       const userById = await User.findById(id)
 //       .populate(({path:'assigned_avisos', select :'centro'}))
 
-      
 //       return res.status(200).json(userById);
 //       // return res.json({
 //       //     status: 200,
@@ -247,9 +233,4 @@ const loginUser = async (req, res, next)=>{
 //   }
 // };
 
-
-
-
-
-
-  export {  loginUser, logoutUser };
+export { loginUser, logoutUser, registerUser };

@@ -4,12 +4,13 @@ import jwt from "jsonwebtoken";
 import { isAuth } from '../../authentication/jwt.js';
 import { upload, uploadToCloudinary } from '../../middlewares/file.middleware.js';
 
-import { loginUser, logoutUser } from '../controllers/user.controller.js';
+import { loginUser, logoutUser, registerUser } from '../controllers/user.controller.js';
 
  const userRoutes = express.Router();
 
  
  userRoutes.post('/login/',loginUser);
+ userRoutes.post('/register/',registerUser);
  userRoutes.post('/logout/',logoutUser);
  
 
