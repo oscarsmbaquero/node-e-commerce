@@ -1,5 +1,6 @@
 import { httpStatusCode } from "../../utils/httpStatusCode.js";
 import { Products } from "../models/Products.Model.js";
+import { User } from "../models/User.Model.js";
 import { Ventas } from "../models/Ventas.Model.js";
 import { ObjectId } from "mongodb";
 
@@ -67,7 +68,12 @@ const buyProducts = async (req, res, next) => {
     });
     console.log(newSale.userBuy);
     // Guardar la venta en la base de datos
-    await newSale.save();
+    const newPedidoCliente =  await newSale.save();
+    await User.updateOne(
+      { _id: userBuy },
+      { $push: { numeroPedido: newSale._id } },
+      { new: true }
+    );
 
     // Puedes responder con el número de pedido si es necesario
     return res.status(201).json({

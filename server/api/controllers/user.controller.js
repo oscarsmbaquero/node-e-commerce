@@ -184,53 +184,53 @@ const registerUser = async (req, res, next) => {
 
 // }
 // })
-// const reAssignAviso = ('/', async (req, res, next) => {
-//   const { userId, estado, avisoId, idUserOld } = req.body;
+const OrderClient = ('/', async (req, res, next) => {
+  const { userId, estado, avisoId, idUserOld } = req.body;
 
-//  try {
+ try {
 
-//   const estadoModify = await Avisos.findByIdAndUpdate(
-//     avisoId,
-//     {estado:estado,
-//      user_assigned:userId
-//     }
-//  );
+  const estadoModify = await Avisos.findByIdAndUpdate(
+    avisoId,
+    {estado:estado,
+     user_assigned:userId
+    }
+ );
 
-//  const updatedAvisoUser = await User.findByIdAndUpdate(
-//   idUserOld,
-//     { $pull: { assigned_avisos: avisoId } },
-//     { new: true }
-// );
-// const updatedAvisoUser2 = await User.findByIdAndUpdate(
-//   userId,
-//     { $push: { assigned_avisos: avisoId } },
-//     { new: true }
-// );
+ const updatedAvisoUser = await User.findByIdAndUpdate(
+  idUserOld,
+    { $pull: { assigned_avisos: avisoId } },
+    { new: true }
+);
+const updatedAvisoUser2 = await User.findByIdAndUpdate(
+  userId,
+    { $push: { assigned_avisos: avisoId } },
+    { new: true }
+);
 
-//     return res.status(200).json(estadoModify);
-//   } catch (error) {
-//     return next(error);
-//   }
-// });
+    return res.status(200).json(estadoModify);
+  } catch (error) {
+    return next(error);
+  }
+});
 
-// const getUserById = async (req, res, next) => {
+const getUserById = async (req, res, next) => {
 
-//   try {
-//       const { id } = req.params;
-//       console.log(id);
-//       const userById = await User.findById(id)
-//       .populate(({path:'assigned_avisos', select :'centro'}))
+  try {
+      const { id } = req.params;
+      console.log(id);
+      const userById = await User.findById(id)
+      .populate(({path:'assigned_avisos', select :'centro'}))
 
-//       return res.status(200).json(userById);
-//       // return res.json({
-//       //     status: 200,
-//       //     message: httpStatusCode[200],
-//       //     data: { jobs: jobbyid },
-//       // });
-//       //res.send(jobbyid);
-//   } catch (error) {
-//       return next(error)
-//   }
-// };
+      return res.status(200).json(userById);
+      // return res.json({
+      //     status: 200,
+      //     message: httpStatusCode[200],
+      //     data: { jobs: jobbyid },
+      // });
+      //res.send(jobbyid);
+  } catch (error) {
+      return next(error)
+  }
+};
 
 export { loginUser, logoutUser, registerUser };
