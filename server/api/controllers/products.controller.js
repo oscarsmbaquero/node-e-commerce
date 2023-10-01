@@ -62,6 +62,7 @@ const buyProducts = async (req, res, next) => {
       orderNumber: orderNumber,
       products: productsToInsert,
       userBuy: userBuy,
+      estadoPedido: 'Pagado',
       //buyerEmail: buyerEmail, // Agregar el correo electrónico del comprador
     });
     console.log(newSale.userBuy);
