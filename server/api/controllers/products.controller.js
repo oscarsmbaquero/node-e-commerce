@@ -1,5 +1,6 @@
 import { httpStatusCode } from "../../utils/httpStatusCode.js";
 import { Products } from "../models/Products.Model.js";
+import { Ventas } from "../models/Ventas.MOdel.js";
 import { ObjectId } from "mongodb";
 
 
@@ -41,29 +42,84 @@ const productsDetail = async (req, res, next) => {
     return next(error);
   }
 };
+const buyProducts = async (req, res, next) => {
+  //console.log(req.body);
+  
+  try {
+    const orderNumber = generateOrderNumber(); // Generar un número de pedido único para la compra
+    const userBuy = req.body.idUser;
+    const productsToInsert = req.body.products.map((productData) => {
+      return {
+        name: productData.name,
+        description: productData.description,
+        unidades: productData.unidades,
+        precio: productData.precio,
+      };
+    });
 
-// const createCars = async (req, res, next) => {
-//   console.log("Entro",req.file);
-//   console.log(req.file_url, 46);
+    // Crear una venta con el número de pedido
+    const newSale = new Ventas({
+      orderNumber: orderNumber,
+      products: productsToInsert,
+      userBuy: userBuy,
+      //buyerEmail: buyerEmail, // Agregar el correo electrónico del comprador
+    });
+    console.log(newSale.userBuy);
+    // Guardar la venta en la base de datos
+    await newSale.save();
+
+    // Puedes responder con el número de pedido si es necesario
+    return res.status(201).json({
+      status: 201,
+      message: `Venta registrada correctamente, su numero de pedido es ${orderNumber}`,
+      data: { orderNumber: orderNumber },
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+// const buyProducts = async (req, res, next) => {
 //   try {
-//     const NewCar = new Cars({
-//       marca: req.body.marca,
-//       modelo: req.body.modelo,
-//       imagenUrl: req.file_url,
-//       //imagen: req.file_url,
-//       anio: req.body.anio,
-//       tipo:req.body.tipo,
+//     const orderNumber = generateOrderNumber(); // Generar un número de pedido único para la compra
+
+//     const productsToInsert = req.body.map((productData) => {
+//       return new Ventas({
+//         name: productData.name,
+//         description: productData.description,
+//         unidades: productData.unidades,
+//         precio: productData.precio,
+//         orderNumber: orderNumber, // Asignar el mismo número de pedido a todos los productos
+//       });
 //     });
-//     const newCarDB = await NewCar.save();
-//     return res.json({
+
+//     // Insertar los productos en la base de datos
+//     const insertedProducts = await Ventas.insertMany(productsToInsert);
+
+//     //console.log(insertedProducts); // Muestra los productos que se han insertado en la base de datos
+
+//     // Puedes responder con los productos insertados si es necesario
+//     return res.status(201).json({
 //       status: 201,
-//       message: httpStatusCode[201],
-//       data: { cars: newCarDB },
+//       message: 'Productos insertados correctamente',
+//       data: { products: insertedProducts },
 //     });
 //   } catch (error) {
 //     return next(error);
 //   }
 // };
+
+/**
+ * Generar numero de pedido por cada compra
+ * @returns 
+ */
+function generateOrderNumber() {
+  // Puedes usar una lógica personalizada para generar números de pedido únicos
+  // Aquí hay un ejemplo simple que combina una marca de tiempo con un número aleatorio:
+  const timestamp = Date.now();
+  const randomPart = Math.floor(Math.random() * 1000); // Número aleatorio entre 0 y 999
+  return `${timestamp}-${randomPart}`;
+}
 
 
 // const updateCars = async (req, res, next) => {
@@ -119,4 +175,4 @@ const productsDetail = async (req, res, next) => {
 
 
 
-export { getProducts, productsDetail };
+export { getProducts, productsDetail, buyProducts };
