@@ -1,6 +1,6 @@
 import { httpStatusCode } from "../../utils/httpStatusCode.js";
 import { Products } from "../models/Products.Model.js";
-import { Ventas } from "../models/Ventas.MOdel.js";
+import { Ventas } from "../models/Ventas.Model.js";
 import { ObjectId } from "mongodb";
 
 
