@@ -71,7 +71,7 @@ const buyProducts = async (req, res, next) => {
     // Puedes responder con el número de pedido si es necesario
     return res.status(201).json({
       status: 201,
-      message: `Venta registrada correctamente, su numero de pedido es ${orderNumber}`,
+      message: `Venta registrada correctamente, su numero de pedidos es ${orderNumber}`,
       data: { orderNumber: orderNumber },
     });
   } catch (error) {
