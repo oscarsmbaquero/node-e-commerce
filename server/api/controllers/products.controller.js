@@ -11,6 +11,8 @@ const getProducts = async (req, res, next) => {
   console.log('Entroxxxxxxxxxxxxx');
   try {
     const products = await Products.find();
+    //.populate({ path: "numeroPedido", select: "unidades" });
+    
     // .populate({ path: "materialIntervencion",select: "descripcion"})
     // .populate({path:'cliente', select :""})
     return res.status(200).json(products);

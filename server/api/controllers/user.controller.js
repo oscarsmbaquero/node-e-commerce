@@ -185,32 +185,25 @@ const registerUser = async (req, res, next) => {
 // }
 // })
 const OrderClient = ('/', async (req, res, next) => {
-  const { userId, estado, avisoId, idUserOld } = req.body;
-
- try {
-
-  const estadoModify = await Avisos.findByIdAndUpdate(
-    avisoId,
-    {estado:estado,
-     user_assigned:userId
-    }
- );
-
- const updatedAvisoUser = await User.findByIdAndUpdate(
-  idUserOld,
-    { $pull: { assigned_avisos: avisoId } },
-    { new: true }
-);
-const updatedAvisoUser2 = await User.findByIdAndUpdate(
-  userId,
-    { $push: { assigned_avisos: avisoId } },
-    { new: true }
-);
-
-    return res.status(200).json(estadoModify);
-  } catch (error) {
+  console.log('Entro');
+   //const { userId, estado, avisoId, idUserOld } = req.body;
+   try {
+    const { userId } = req.params;
+    console.log(userId);
+    const userById = await User.findById(userId)
+    .populate([{ path: "numeroPedido",select: ""}]);
+    console.log(userById,'userId');
+     return res.json({
+      //  status : 200,
+      //  message : httpStatusCode[200],
+      data: { pedidos: userById },
+    });
+   } catch (error) {
     return next(error);
-  }
+   }
+  
+
+
 });
 
 const getUserById = async (req, res, next) => {
@@ -233,4 +226,4 @@ const getUserById = async (req, res, next) => {
   }
 };
 
-export { loginUser, logoutUser, registerUser };
+export { loginUser, logoutUser, registerUser, OrderClient };
