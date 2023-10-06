@@ -12,11 +12,12 @@ const Orders = ('/', async (req, res, next) => {
     const pedidos = await Ventas.find();
    
     console.log(pedidos,'ventas');
-     return res.json({
-      //  status : 200,
-      //  message : httpStatusCode[200],
-      data: { pedidos: pedidos },
-    });
+    return res.status(200).json(pedidos);
+    //  return res.json({
+    //   //  status : 200,
+    //   //  message : httpStatusCode[200],
+    //   data: { pedidos: pedidos },
+    // });
    } catch (error) {
     return next(error);
    }
