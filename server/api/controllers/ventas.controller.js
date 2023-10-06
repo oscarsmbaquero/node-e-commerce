@@ -23,24 +23,48 @@ const Orders = ('/', async (req, res, next) => {
 /**
  * cambiar el estado del envio
  */
- const changeStateOrder =( '/', async (req, res, next) =>{
+//  const changeStateOrder =( '/', async (req, res, next) =>{
+//   console.log('Entrosssss');
+//   try {
+//     const { id } = req.params;
+//     console.log(id);  
+//     const changeState = await Ventas.findByIdAndUpdate(
+//       id,
+//       { estadoPedido: "Cobrado" }
+//     );
+
+
+
+//   } catch (error) {
+    
+//   }
+  
+
+// });
+const changeStateOrder = async (req, res, next) => {
   console.log('Entro');
   try {
     const { id } = req.params;
-    console.log(id);  
+    const { estado } = req.body;  // Extrae el estado del cuerpo de la solicitud
+
+    console.log(id, estado);  // Verifica que recibes correctamente la ID y el nuevo estado
+
     const changeState = await Ventas.findByIdAndUpdate(
       id,
-      { estadoPedido: "Cobrado" }
+      { estadoPedido: estado }, // Actualiza el estado con el nuevo valor
+      { new: true } // Para obtener el documento actualizado
     );
 
+    if (!changeState) {
+      return res.status(404).json({ message: 'Pedido no encontrado' });
+    }
 
-
+    res.status(200).json(changeState);
   } catch (error) {
-    
+    console.error(error);
+    res.status(500).json({ message: 'Error interno del servidor' });
   }
-  
-
-});
+};
 
 
 
