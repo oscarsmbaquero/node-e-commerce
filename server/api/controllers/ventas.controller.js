@@ -10,8 +10,6 @@ const Orders = ('/', async (req, res, next) => {
     const { userId } = req.params;
     console.log(userId);
     const pedidos = await Ventas.find();
-   
-    console.log(pedidos,'ventas');
     return res.status(200).json(pedidos);
     //  return res.json({
     //   //  status : 200,
@@ -22,9 +20,30 @@ const Orders = ('/', async (req, res, next) => {
     return next(error);
    }
 });
+/**
+ * cambiar el estado del envio
+ */
+ const changeStateOrder =( '/', async (req, res, next) =>{
+  console.log('Entro');
+  try {
+    const { id } = req.params;
+    console.log(id);  
+    const changeState = await Ventas.findByIdAndUpdate(
+      id,
+      { estadoPedido: "Cobrado" }
+    );
+
+
+
+  } catch (error) {
+    
+  }
+  
+
+});
 
 
 
 
 
-export { Orders };
+export { Orders, changeStateOrder };
