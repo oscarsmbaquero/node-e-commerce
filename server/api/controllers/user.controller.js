@@ -202,10 +202,9 @@ const OrderClient = ('/', async (req, res, next) => {
    } catch (error) {
     return next(error);
    }
-  
-
-
 });
+
+
 
 const getUserById = async (req, res, next) => {
 

@@ -9,7 +9,7 @@ import { DB_URL, connect } from "./server/config/db.js";
 //IMPORTACION DE RUTAS
 import { productRoutes } from "./server/api/routes/products.routes.js";
 import { userRoutes } from "./server/api/routes/users.routes.js";
-
+import { ventasRoutes } from "./server/api/routes/ventas.routes.js";
 
 //creo servidor express
 const server = express();
@@ -31,7 +31,7 @@ server.use(cors('*'));
 //RUTAS
 server.use("/products", productRoutes);
 server.use("/users", userRoutes);
-
+server.use("/ventas", ventasRoutes)
 
 
 
