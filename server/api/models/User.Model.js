@@ -7,7 +7,7 @@ const userSchema = new Schema(
     password: { type: String, required: true },
     mail:{ type:String, required: true},
     tlf:{ type:String, required: true},
-    rol:{ type:String, required: true},
+    rol:{ type:String, required: false},
     //numeroPedido: { type: Object, required: false },
     numeroPedido: [{ type: mongoose.Types.ObjectId, ref: 'Ventas', required:false }]
 
