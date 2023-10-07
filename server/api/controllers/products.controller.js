@@ -98,78 +98,31 @@ const buyProducts = async (req, res, next) => {
   }
 };
 
-//   try {
-//     const orderNumber = generateOrderNumber(); // Generar un número de pedido único para la compra
-//     const userBuy = req.body.idUser;
-//     const productsToInsert = req.body.products.map((productData) => {
-//       return {
-//         name: productData.name,
-//         description: productData.description,
-//         unidades: productData.unidades,
-//         precio: productData.precio,
-//       };
-//     });
+const changeInventary = async (req, res, next) => {
+  console.log('EntroInventaryasdasd');
+  try {
+    const { id } = req.params;
+    const { unidades } = req.body;  // Extrae el estado del cuerpo de la solicitud
 
-//     // Crear una venta con el número de pedido
-//     const newSale = new Ventas({
-//       orderNumber: orderNumber,
-//       products: productsToInsert,
-//       userBuy: userBuy,
-//       estadoPedido: "Preparando pédido",
-//       //buyerEmail: buyerEmail, // Agregar el correo electrónico del comprador
-//     });
-//     console.log(newSale);
-//     // Guardar la venta en la base de datos
-//     const newPedidoCliente = await newSale.save();
-//     await User.updateOne(
-//       { _id: userBuy },
-//       { $push: { numeroPedido: newSale._id } },
-//       { new: true }
-//     );
-//     const estadoUpdated = await Products.findByIdAndUpdate(products._id, {
-//       unidades: products.unidades,
-//     });
+    console.log(id, unidades,107);  // Verifica que recibes correctamente la ID y el nuevo estado
 
-//     // Puedes responder con el número de pedido si es necesario
-//     return res.status(201).json({
-//       status: 201,
-//       message: `Venta registrada correctamente, su numero de pedidos es ${orderNumber}`,
-//       data: { orderNumber: orderNumber },
-//     });
-//   } catch (error) {
-//     return next(error);
-//   }
-// };
+    const changeState = await Products.findByIdAndUpdate(
+      id,
+      { unidades: unidades }, // Actualiza el estado con el nuevo valor
+      { new: true } // Para obtener el documento actualizado
+    );
 
-// const buyProducts = async (req, res, next) => {
-//   try {
-//     const orderNumber = generateOrderNumber(); // Generar un número de pedido único para la compra
+    if (!changeState) {
+      return res.status(404).json({ message: 'Pedido no encontrado' });
+    }
 
-//     const productsToInsert = req.body.map((productData) => {
-//       return new Ventas({
-//         name: productData.name,
-//         description: productData.description,
-//         unidades: productData.unidades,
-//         precio: productData.precio,
-//         orderNumber: orderNumber, // Asignar el mismo número de pedido a todos los productos
-//       });
-//     });
+    res.status(200).json(changeState);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+};
 
-//     // Insertar los productos en la base de datos
-//     const insertedProducts = await Ventas.insertMany(productsToInsert);
-
-//     //console.log(insertedProducts); // Muestra los productos que se han insertado en la base de datos
-
-//     // Puedes responder con los productos insertados si es necesario
-//     return res.status(201).json({
-//       status: 201,
-//       message: 'Productos insertados correctamente',
-//       data: { products: insertedProducts },
-//     });
-//   } catch (error) {
-//     return next(error);
-//   }
-// };
 
 /**
  * Generar numero de pedido por cada compra
@@ -184,4 +137,4 @@ function generateOrderNumber() {
 }
 
 
-export { getProducts, productsDetail, buyProducts };
+export { getProducts, productsDetail, buyProducts, changeInventary };

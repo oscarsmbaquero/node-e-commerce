@@ -42,7 +42,7 @@ const Orders = ('/', async (req, res, next) => {
 
 // });
 const changeStateOrder = async (req, res, next) => {
-  console.log('Entro');
+  console.log('EntroStateOrder');
   try {
     const { id } = req.params;
     const { estado } = req.body;  // Extrae el estado del cuerpo de la solicitud
