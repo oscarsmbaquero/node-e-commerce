@@ -62,14 +62,14 @@ const logoutUser = async (req, res, next) => {
   }
 };
 
-// const getUsers = async (req,res,next) =>{
-//   try {
-//       const users = await User.find();
-//       return res.status(200).json(users);
-//   } catch (error) {
-//       return next(error)
-//   }
-// };
+const getUsers = async (req,res,next) =>{
+  try {
+      const users = await User.find();
+      return res.status(200).json(users);
+  } catch (error) {
+      return next(error)
+  }
+};
 
 // const deleteUser = async (req, res, next) => {
 
@@ -226,4 +226,4 @@ const getUserById = async (req, res, next) => {
   }
 };
 
-export { loginUser, logoutUser, registerUser, OrderClient };
+export { loginUser, logoutUser, registerUser, OrderClient, getUsers };
