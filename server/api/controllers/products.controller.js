@@ -71,6 +71,8 @@ const buyProducts = async (req, res, next) => {
       { $push: { numeroPedido: newSale._id } },
       { new: true }
     );
+     // Recuperar los datos del usuario
+     const user = await User.findById(userBuy);
     // Itero por los productos para extraer el id y las unidades
     for (const productData of req.body.products) {
       const productId = productData._id;
@@ -91,7 +93,11 @@ const buyProducts = async (req, res, next) => {
     return res.status(201).json({
       status: 201,
       message: `Venta registrada correctamente, su número de pedido es ${orderNumber}`,
-      data: { orderNumber: orderNumber },
+      data: { 
+        orderNumber: orderNumber,
+        user: user, 
+      },
+      
     });
   } catch (error) {
     return next(error);
