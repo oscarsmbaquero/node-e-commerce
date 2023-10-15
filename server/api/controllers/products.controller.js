@@ -53,7 +53,7 @@ const buyProducts = async (req, res, next) => {
       return {
         name: productData.name,
         description: productData.description,
-        unidades: productData.unidades,
+        unidades: productData.unidadesCompra,
         precio: productData.precio,
       };
     });
