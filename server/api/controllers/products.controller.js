@@ -76,7 +76,7 @@ const buyProducts = async (req, res, next) => {
     // Itero por los productos para extraer el id y las unidades
     for (const productData of req.body.products) {
       const productId = productData._id;
-      const unidadesToSubtract = productData.unidades;
+      const unidadesToSubtract = productData.unidadesCompra;
       //Busco en la base de datos cada producto
       const productoActual = await Products.findById(productId);
       //el producto que encuentre con cada id
