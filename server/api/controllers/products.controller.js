@@ -142,5 +142,30 @@ function generateOrderNumber() {
   return `${timestamp}-${randomPart}`;
 }
 
+const createProduct = async (req, res, next) => {
+  console.log("Entro",req.file);
+  console.log(req.file_url, 46);
+  try {
+    const NewProduct = new Products({
+      name: req.body.name,
+      description: req.body.description,
+      image: req.file_url,
+      //imagen: req.file_url,
+      pCompra: req.body.pCompra,
+      precio: req.body.pvp,
+      unidades: req.body.unidades,
+      //tipo:req.body.tipo,
+    });
+    const newProductDB = await NewProduct.save();
+    return res.json({
+      status: 201,
+      message: httpStatusCode[201],
+      data: { cars: newProductDB },
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
 
-export { getProducts, productsDetail, buyProducts, changeInventary };
+
+export { getProducts, productsDetail, buyProducts, changeInventary, createProduct };

@@ -3,6 +3,8 @@ import express from "express";
 import  "dotenv/config";
 import cors from 'cors';
 
+// import request from "request";
+
 //FUNCION DE LLAMADA
 import { DB_URL, connect } from "./server/config/db.js";
 
@@ -10,6 +12,7 @@ import { DB_URL, connect } from "./server/config/db.js";
 import { productRoutes } from "./server/api/routes/products.routes.js";
 import { userRoutes } from "./server/api/routes/users.routes.js";
 import { ventasRoutes } from "./server/api/routes/ventas.routes.js";
+import { paypalRoutes } from "./server/api/routes/paypal.routes.js";
 
 //creo servidor express
 const server = express();
@@ -19,6 +22,7 @@ connect();
 const PORT = process.env.PORT;
 
 
+
 server.set("secretKey", "nodeRestApi"); 
 
 
@@ -26,12 +30,15 @@ server.set("secretKey", "nodeRestApi");
 server.use(express.json());
 server.use(express.urlencoded({extended:true}));
 server.use(cors('*'));
+//server.use(request);
 
 
 //RUTAS
 server.use("/products", productRoutes);
 server.use("/users", userRoutes);
-server.use("/ventas", ventasRoutes)
+server.use("/ventas", ventasRoutes);
+server.use('/paypal', paypalRoutes);
+
 
 
 
@@ -50,6 +57,15 @@ server.listen(PORT, () => {
   //Escucho mi servidor en el puerto indicado
   console.log(`Node server listening on port http://localhost:${PORT}`);
 });
+
+
+
+
+
+
+
+
+
 
 // const addListeners = () =>{
 
