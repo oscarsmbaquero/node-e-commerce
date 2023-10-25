@@ -49,7 +49,8 @@ const buyProducts = async (req, res, next) => {
   try {
     const orderNumber = generateOrderNumber(); // Generar un número de pedido único para la compra
     const userBuy = req.body.idUser;
-    const productsToInsert = req.body.products.map((productData) => {
+    console.log(req.body,789);
+    const productsToInsert = req.body.venta.products.map((productData) => {
       return {
         name: productData.name,
         description: productData.description,
@@ -57,13 +58,17 @@ const buyProducts = async (req, res, next) => {
         precio: productData.precio,
       };
     });
+    const precioVenta = req.body.venta.salePrice;
+    console.log(precioVenta,62);
     // Crear una venta con el número de pedido
     const newSale = new Ventas({
       orderNumber: orderNumber,
       products: productsToInsert,
       userBuy: userBuy,
-      estadoPedido: "Preparando pedido",
+      salePrice: precioVenta,
+      estadoPedido: "En proceso",
     });
+    console.log(newSale,'newSale');
     // Guardar la venta en la base de datos
     const newPedidoCliente = await newSale.save();
     await User.updateOne(
@@ -74,7 +79,7 @@ const buyProducts = async (req, res, next) => {
      // Recuperar los datos del usuario
      const user = await User.findById(userBuy);
     // Itero por los productos para extraer el id y las unidades
-    for (const productData of req.body.products) {
+    for (const productData of req.body.venta.products) {
       const productId = productData._id;
       const unidadesToSubtract = productData.unidadesCompra;
       //Busco en la base de datos cada producto

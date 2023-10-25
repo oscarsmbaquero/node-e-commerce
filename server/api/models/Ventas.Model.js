@@ -14,6 +14,7 @@ const saleSchema = new Schema(
     userBuy: { type: String, required: false }, // Correo electrónico del comprador
     products: [productSchema], // Un arreglo de productos asociados a la venta
     estadoPedido: { type: String, required: false }, // Número de pedido único
+    salePrice: { type: Number, required: false},
   },
   {
     timestamps: true,
