@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { isAuth } from '../../authentication/jwt.js';
 import { upload, uploadToCloudinary } from '../../middlewares/file.middleware.js';
 
-import { loginUser, logoutUser, registerUser, OrderClient,getUsers } from '../controllers/user.controller.js';
+import { loginUser, logoutUser, registerUser, OrderClient,getUsers, getUserById } from '../controllers/user.controller.js';
 
  const userRoutes = express.Router();
 
@@ -14,6 +14,7 @@ import { loginUser, logoutUser, registerUser, OrderClient,getUsers } from '../co
  userRoutes.post('/logout/',logoutUser);
  userRoutes.get('/:userId',OrderClient);
  userRoutes.get('/',getUsers);
+ userRoutes.get('/:id',getUserById);
  
 
 
