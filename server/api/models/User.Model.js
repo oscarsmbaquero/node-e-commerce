@@ -8,6 +8,9 @@ const userSchema = new Schema(
     mail:{ type:String, required: true},
     tlf:{ type:String, required: true},
     rol:{ type:String, required: false},
+    address:{ type:String, required: false},
+    cp:{ type:String, required: false},
+    province:{ type:String, required: false},
     //numeroPedido: { type: Object, required: false },
     numeroPedido: [{ type: mongoose.Types.ObjectId, ref: 'Ventas', required:false }]
 

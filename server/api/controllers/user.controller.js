@@ -202,7 +202,7 @@ const OrderClient = ('/', async (req, res, next) => {
     console.log(userId);
     const userById = await User.findById(userId)
     .populate([{ path: "numeroPedido",select: ""}]);
-    console.log(userById,'userIdssss');
+    
      return res.json({
       //  status : 200,
       //  message : httpStatusCode[200],
@@ -234,4 +234,26 @@ console.log('Entro id');
   }
 };
 
-export { loginUser, logoutUser, registerUser, OrderClient, getUsers, getUserById };
+const editUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    console.log(id,240);
+    const pilotModify = new User(req.body);
+    console.log(pilotModify,'userModify');
+    //Para evitar que se modifique el id de mongo:
+    pilotModify._id = id;
+    const pilotUpdated = await User.findByIdAndUpdate(
+      id,
+      pilotModify
+    );
+    return res.json({
+      status: 200,
+      message: httpStatusCode[200],
+      data: { pilot: pilotUpdated },
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export { loginUser, logoutUser, registerUser, OrderClient, getUsers, getUserById, editUser };
