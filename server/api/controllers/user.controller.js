@@ -256,4 +256,27 @@ const editUser = async (req, res, next) => {
   }
 };
 
-export { loginUser, logoutUser, registerUser, OrderClient, getUsers, getUserById, editUser };
+const resetPassword = async (req, res, next) => {
+  console.log('entro');
+  try {
+    const { email } = req.params;
+    console.log(email,'mail');
+    //Para evitar que se modifique el id de mongo:
+    // pilotModify._id = id;
+    // const pilotUpdated = await User.findByIdAndUpdate(
+    //   id,
+    //   pilotModify
+    // );
+    // return res.json({
+    //   status: 200,
+    //   message: httpStatusCode[200],
+    //   data: { pilot: pilotUpdated },
+    // });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+
+
+export { loginUser, logoutUser, registerUser, OrderClient, getUsers, getUserById, editUser, resetPassword };
