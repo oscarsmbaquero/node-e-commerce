@@ -256,22 +256,77 @@ const editUser = async (req, res, next) => {
   }
 };
 
+const getUserByMail = async (req, res, next) => {
+    try {
+        const { email } = req.params;
+        const userById = await User.findOne({ mail: email });
+        return res.status(200).json(userById);
+        // return res.json({
+        //     status: 200,
+        //     message: httpStatusCode[200],
+        //     data: { jobs: userById },
+        // });
+        //res.send(jobbyid);
+    } catch (error) {
+        return next(error)
+    }
+  };
+
+// const resetPassword = async (req, res, next) => {
+//   console.log('entro');
+//   try {
+//     const { email } = req.params;
+//     console.log(email,'mail');
+//     const newPassword = req.body.nuevaContrasena;
+//     console.log(newPassword,283);
+//     const previousUser = await User.findOne({ mail: email });
+//     console.log(previousUser,285)
+//     const pwdHash = await bcrypt.hash(newPassword, 10);
+    
+//     console.log(pwdHash,previousUser,286)
+//     //Para evitar que se modifique el id de mongo:
+//     // pilotModify._id = id;
+//     // const pilotUpdated = await User.findByIdAndUpdate(
+//     //   id,
+//     //   pilotModify
+//     // );
+//     // return res.json({
+//     //   status: 200,
+//     //   message: httpStatusCode[200],
+//     //   data: { pilot: pilotUpdated },
+//     // });
+//   } catch (error) {
+//     return next(error);
+//   }
+// };
 const resetPassword = async (req, res, next) => {
   console.log('entro');
   try {
     const { email } = req.params;
-    console.log(email,'mail');
-    //Para evitar que se modifique el id de mongo:
-    // pilotModify._id = id;
-    // const pilotUpdated = await User.findByIdAndUpdate(
-    //   id,
-    //   pilotModify
-    // );
-    // return res.json({
+    console.log(email, 'mail');
+    const newPassword = req.body.nuevaContrasena;
+    console.log(newPassword, 283);
+    const previousUser = await User.findOne({ mail: email });
+    console.log(previousUser, 285);
+    if (!previousUser) {
+      return res.status(404).json({
+        status: 404,
+        message: 'Usuario no encontrado',
+      });
+    }
+    const pwdHash = await bcrypt.hash(newPassword, 10);
+    previousUser.password = pwdHash;
+    console.log(previousUser);
+    await previousUser.save();
+    // return res.status(200).json({
     //   status: 200,
-    //   message: httpStatusCode[200],
-    //   data: { pilot: pilotUpdated },
+    //   message: 'Contraseña actualizada con éxito',
     // });
+     return res.json({
+            status: 200,
+            message: httpStatusCode[200],
+            data: { previousUser: previousUser },
+        });
   } catch (error) {
     return next(error);
   }
@@ -279,4 +334,5 @@ const resetPassword = async (req, res, next) => {
 
 
 
-export { loginUser, logoutUser, registerUser, OrderClient, getUsers, getUserById, editUser, resetPassword };
+
+export { loginUser, logoutUser, registerUser, OrderClient, getUsers, getUserById, editUser, getUserByMail ,resetPassword };
