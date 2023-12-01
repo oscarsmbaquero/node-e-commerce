@@ -3,8 +3,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { httpStatusCode } from "../../utils/httpStatusCode.js";
 
+//import sendMail from "./sendMail.js";
+import nodemailer from "nodemailer";
 const loginUser = async (req, res, next) => {
-  console.log("Entro");
   try {
     const { body } = req;
     console.log(body.password, 60);
@@ -79,6 +80,8 @@ const getUserActive = async (req,res,next) =>{
       return next(error)
   }
 };
+
+
 
 // const deleteUser = async (req, res, next) => {
 
@@ -301,23 +304,58 @@ const getUserByMail = async (req, res, next) => {
 // };
 const resetPassword = async (req, res, next) => {
   console.log('entro');
+  
   try {
     const { email } = req.params;
+    // Send email notification
+    console.log(email,'email');
+
+    //return res.status(200).send('User has been created and Email sent')
     console.log(email, 'mail');
-    const newPassword = req.body.nuevaContrasena;
-    console.log(newPassword, 283);
+    //const newPassword = req.body.nuevaContrasena;
+    // console.log(newPassword, 283);
     const previousUser = await User.findOne({ mail: email });
-    console.log(previousUser, 285);
+    // console.log(previousUser, 285);
+     //await sendMail(email);
     if (!previousUser) {
       return res.status(404).json({
         status: 404,
         message: 'Usuario no encontrado',
       });
     }
-    const pwdHash = await bcrypt.hash(newPassword, 10);
-    previousUser.password = pwdHash;
-    console.log(previousUser);
-    await previousUser.save();
+    //const user = await User.findOne({ user: body.user });
+    const token = jwt.sign(
+      {
+        id: previousUser._id,
+        user: previousUser.user,
+      },
+      req.app.get("secretKey"),
+      { expiresIn: "1h" }
+    );
+    // const pwdHash = await bcrypt.hash(newPassword, 10);
+    // previousUser.password = pwdHash;
+    // console.log(previousUser);
+    // await previousUser.save();
+    //mail
+    const config ={
+      host:'smtp.gmail.com',
+      port : 587,
+      auth: {
+        user:'oscarsmb@gmail.com',
+        pass:'ewqt tsig kcdc pgjl'
+      }
+    }
+    const mensaje ={
+      from: 'Coexist',
+      to: email,
+      subject: 'Correo de Prubeas',
+      //text: `https://angular-e-commerce-ruby.vercel.app/user/new${token}`
+      text:`http://localhost:4200/user/new/${token}`
+    }
+  
+    const transport = nodemailer.createTransport(config);
+  
+    const info = await transport.sendMail(mensaje);
     // return res.status(200).json({
     //   status: 200,
     //   message: 'Contraseña actualizada con éxito',
@@ -331,6 +369,38 @@ const resetPassword = async (req, res, next) => {
     return next(error);
   }
 };
+
+
+
+// const sendMail = async (req, res, next) => {
+
+//   const emailSend = req.body;
+//   console.log(emailSend,369);
+
+//   const config ={
+//     host:'smtp.gmail.com',
+//     port : 587,
+//     auth: {
+//       user:'oscarsmb@gmail.com',
+//       pass:'ewqt tsig kcdc pgjl'
+//     }
+//   }
+//   const mensaje ={
+//     from: 'Coexist',
+//     to: emailSend,
+//     subject: 'Correo d eprubeas',
+//     text: 'Envio de correo de prueba'
+//   }
+
+//   const transport = nodemailer.createTransport(config);
+
+//   const info = await transport.sendMail(mensaje);
+
+//   //console.log(info);
+
+// }
+
+
 
 
 
