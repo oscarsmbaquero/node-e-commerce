@@ -346,7 +346,9 @@ const resetPassword = async (req, res, next) => {
       to: email,
       subject: `Contraseña usuario ${previousUser.user}` ,
       //text: `https://angular-e-commerce-ruby.vercel.app/user/new${token}`
-      text: `https://angular-e-commerce-ruby.vercel.app/user/new/${token}`,
+      text: `Hola  ${previousUser.user}. Adjuntamos enlace para recuperar tu contraseña.
+      Este enlace caduca en 1 hora.
+      https://angular-e-commerce-ruby.vercel.app/user/new/${token}`,
     };
 
     const transport = nodemailer.createTransport(config);
