@@ -63,25 +63,23 @@ const logoutUser = async (req, res, next) => {
   }
 };
 
-const getUsers = async (req,res,next) =>{
+const getUsers = async (req, res, next) => {
   try {
-      const users = await User.find();
-      return res.status(200).json(users);
+    const users = await User.find();
+    return res.status(200).json(users);
   } catch (error) {
-      return next(error)
+    return next(error);
   }
 };
 
-const getUserActive = async (req,res,next) =>{
+const getUserActive = async (req, res, next) => {
   try {
-      const users = await User.findById();
-      return res.status(200).json(users);
+    const users = await User.findById();
+    return res.status(200).json(users);
   } catch (error) {
-      return next(error)
+    return next(error);
   }
 };
-
-
 
 // const deleteUser = async (req, res, next) => {
 
@@ -197,58 +195,56 @@ const registerUser = async (req, res, next) => {
 
 // }
 // })
-const OrderClient = ('/', async (req, res, next) => {
-  console.log('Entro');
-   //const { userId, estado, avisoId, idUserOld } = req.body;
-   try {
-    const { userId } = req.params;
-    console.log(userId);
-    const userById = await User.findById(userId)
-    .populate([{ path: "numeroPedido",select: ""}]);
-    
-     return res.json({
-      //  status : 200,
-      //  message : httpStatusCode[200],
-      data: { pedidos: userById },
-    });
-   } catch (error) {
-    return next(error);
-   }
-});
+const OrderClient =
+  ("/",
+  async (req, res, next) => {
+    console.log("Entro");
+    //const { userId, estado, avisoId, idUserOld } = req.body;
+    try {
+      const { userId } = req.params;
+      console.log(userId);
+      const userById = await User.findById(userId).populate([
+        { path: "numeroPedido", select: "" },
+      ]);
 
-
+      return res.json({
+        //  status : 200,
+        //  message : httpStatusCode[200],
+        data: { pedidos: userById },
+      });
+    } catch (error) {
+      return next(error);
+    }
+  });
 
 const getUserById = async (req, res, next) => {
-console.log('Entro id');
+  console.log("Entro id");
   try {
-      const { id } = req.params;
-      console.log(id);
-      const userById = await User.findById(id);
+    const { id } = req.params;
+    console.log(id);
+    const userById = await User.findById(id);
 
-      return res.status(200).json(userById);
-      // return res.json({
-      //     status: 200,
-      //     message: httpStatusCode[200],
-      //     data: { jobs: jobbyid },
-      // });
-      //res.send(jobbyid);
+    return res.status(200).json(userById);
+    // return res.json({
+    //     status: 200,
+    //     message: httpStatusCode[200],
+    //     data: { jobs: jobbyid },
+    // });
+    //res.send(jobbyid);
   } catch (error) {
-      return next(error)
+    return next(error);
   }
 };
 
 const editUser = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log(id,240);
+    console.log(id, 240);
     const pilotModify = new User(req.body);
-    console.log(pilotModify,'userModify');
+    console.log(pilotModify, "userModify");
     //Para evitar que se modifique el id de mongo:
     pilotModify._id = id;
-    const pilotUpdated = await User.findByIdAndUpdate(
-      id,
-      pilotModify
-    );
+    const pilotUpdated = await User.findByIdAndUpdate(id, pilotModify);
     return res.json({
       status: 200,
       message: httpStatusCode[200],
@@ -260,20 +256,20 @@ const editUser = async (req, res, next) => {
 };
 
 const getUserByMail = async (req, res, next) => {
-    try {
-        const { email } = req.params;
-        const userById = await User.findOne({ mail: email });
-        return res.status(200).json(userById);
-        // return res.json({
-        //     status: 200,
-        //     message: httpStatusCode[200],
-        //     data: { jobs: userById },
-        // });
-        //res.send(jobbyid);
-    } catch (error) {
-        return next(error)
-    }
-  };
+  try {
+    const { email } = req.params;
+    const userById = await User.findOne({ mail: email });
+    return res.status(200).json(userById);
+    // return res.json({
+    //     status: 200,
+    //     message: httpStatusCode[200],
+    //     data: { jobs: userById },
+    // });
+    //res.send(jobbyid);
+  } catch (error) {
+    return next(error);
+  }
+};
 
 // const resetPassword = async (req, res, next) => {
 //   console.log('entro');
@@ -285,7 +281,7 @@ const getUserByMail = async (req, res, next) => {
 //     const previousUser = await User.findOne({ mail: email });
 //     console.log(previousUser,285)
 //     const pwdHash = await bcrypt.hash(newPassword, 10);
-    
+
 //     console.log(pwdHash,previousUser,286)
 //     //Para evitar que se modifique el id de mongo:
 //     // pilotModify._id = id;
@@ -303,24 +299,24 @@ const getUserByMail = async (req, res, next) => {
 //   }
 // };
 const resetPassword = async (req, res, next) => {
-  console.log('entro');
-  
+  console.log("entro");
+
   try {
     const { email } = req.params;
     // Send email notification
-    console.log(email,'email');
+    console.log(email, "email");
 
     //return res.status(200).send('User has been created and Email sent')
-    console.log(email, 'mail');
+    console.log(email, "mail");
     //const newPassword = req.body.nuevaContrasena;
     // console.log(newPassword, 283);
     const previousUser = await User.findOne({ mail: email });
     // console.log(previousUser, 285);
-     //await sendMail(email);
+    //await sendMail(email);
     if (!previousUser) {
       return res.status(404).json({
         status: 404,
-        message: 'Usuario no encontrado',
+        message: "Usuario no encontrado",
       });
     }
     //const user = await User.findOne({ user: body.user });
@@ -337,72 +333,93 @@ const resetPassword = async (req, res, next) => {
     // console.log(previousUser);
     // await previousUser.save();
     //mail
-    const config ={
-      host:'smtp.gmail.com',
-      port : 587,
+    const config = {
+      host: "smtp.gmail.com",
+      port: 587,
       auth: {
-        user:'oscarsmb@gmail.com',
-        pass:'ewqt tsig kcdc pgjl'
-      }
-    }
-    const mensaje ={
-      from: 'Coexist',
+        user: "oscarsmb@gmail.com",
+        pass: "ewqt tsig kcdc pgjl",
+      },
+    };
+    const mensaje = {
+      from: "Coexist",
       to: email,
-      subject: 'Correo de Prubeas',
+      subject: "Correo de Prubeas",
       //text: `https://angular-e-commerce-ruby.vercel.app/user/new${token}`
-      text:`http://localhost:4200/user/new/${token}`
-    }
-  
+      text: `https://angular-e-commerce-ruby.vercel.app/${token}`,
+    };
+
     const transport = nodemailer.createTransport(config);
-  
+
     const info = await transport.sendMail(mensaje);
     // return res.status(200).json({
     //   status: 200,
     //   message: 'Contraseña actualizada con éxito',
     // });
-     return res.json({
-            status: 200,
-            message: httpStatusCode[200],
-            data: { previousUser: previousUser },
-        });
+    return res.json({
+      status: 200,
+      message: httpStatusCode[200],
+      data: { previousUser: previousUser },
+    });
   } catch (error) {
     return next(error);
   }
 };
 
+const changePassword = async (req, res, next) => {
+  // const id = req.params;
+  // const newPassword = req.body;
+  // console.log(id, 369);
+  // console.log(newPassword);
+  const id = req.params.id.toString(); // Convertir a cadena si es necesario
+  const nuevaContrasena = req.body.nuevaContrasena.toString(); // Convertir a cadena si es necesario
+  console.log(id, nuevaContrasena,789);
+   const userById = await User.findById(id);
+   console.log(userById);
+   const pwdHash = await bcrypt.hash(nuevaContrasena, 10);
+   console.log(pwdHash);
+   userById.password = pwdHash;
+   await userById.save();
 
+   //     console.log(pwdHash,previousUser,286)
 
-// const sendMail = async (req, res, next) => {
+  // return res.json({
+  //   //  status : 200,
+  //   //  message : httpStatusCode[200],
+  //   data: { pedidos: userById },
+  // });
 
-//   const emailSend = req.body;
-//   console.log(emailSend,369);
+  // const config ={
+  //   host:'smtp.gmail.com',
+  //   port : 587,
+  //   auth: {
+  //     user:'oscarsmb@gmail.com',
+  //     pass:'ewqt tsig kcdc pgjl'
+  //   }
+  // }
+  // const mensaje ={
+  //   from: 'Coexist',
+  //   to: emailSend,
+  //   subject: 'Correo d eprubeas',
+  //   text: 'Envio de correo de prueba'
+  // }
 
-//   const config ={
-//     host:'smtp.gmail.com',
-//     port : 587,
-//     auth: {
-//       user:'oscarsmb@gmail.com',
-//       pass:'ewqt tsig kcdc pgjl'
-//     }
-//   }
-//   const mensaje ={
-//     from: 'Coexist',
-//     to: emailSend,
-//     subject: 'Correo d eprubeas',
-//     text: 'Envio de correo de prueba'
-//   }
+  // const transport = nodemailer.createTransport(config);
 
-//   const transport = nodemailer.createTransport(config);
+  // const info = await transport.sendMail(mensaje);
 
-//   const info = await transport.sendMail(mensaje);
+  //console.log(info);
+};
 
-//   //console.log(info);
-
-// }
-
-
-
-
-
-
-export { loginUser, logoutUser, registerUser, OrderClient, getUsers, getUserById, editUser, getUserByMail ,resetPassword };
+export {
+  loginUser,
+  logoutUser,
+  registerUser,
+  OrderClient,
+  getUsers,
+  getUserById,
+  editUser,
+  getUserByMail,
+  resetPassword,
+  changePassword,
+};

@@ -5,7 +5,7 @@ import { isAuth } from '../../authentication/jwt.js';
 import { upload, uploadToCloudinary } from '../../middlewares/file.middleware.js';
 
 import { loginUser, logoutUser, registerUser, OrderClient,getUsers, getUserById, editUser, resetPassword,
-    getUserByMail } from '../controllers/user.controller.js';
+    getUserByMail, changePassword } from '../controllers/user.controller.js';
 
  const userRoutes = express.Router();
 
@@ -19,6 +19,7 @@ import { loginUser, logoutUser, registerUser, OrderClient,getUsers, getUserById,
  userRoutes.get('/mail/:email',getUserByMail);
  userRoutes.put("/modify/:id", editUser);
  userRoutes.post("/reset-password/:email",resetPassword);
+ userRoutes.post("/changePassword/:id",changePassword);
  
 
 
