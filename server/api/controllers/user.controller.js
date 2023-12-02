@@ -346,7 +346,7 @@ const resetPassword = async (req, res, next) => {
       to: email,
       subject: "Correo de Prubeas",
       //text: `https://angular-e-commerce-ruby.vercel.app/user/new${token}`
-      text: `https://angular-e-commerce-ruby.vercel.app/user/new${token}`,
+      text: `https://angular-e-commerce-ruby.vercel.app/user/new/${token}`,
     };
 
     const transport = nodemailer.createTransport(config);
