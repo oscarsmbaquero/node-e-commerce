@@ -344,7 +344,7 @@ const resetPassword = async (req, res, next) => {
     const mensaje = {
       from: "Coexist",
       to: email,
-      subject: "Correo de Prubeas",
+      subject: `Contraseña usuario ${previousUser.user}` ,
       //text: `https://angular-e-commerce-ruby.vercel.app/user/new${token}`
       text: `https://angular-e-commerce-ruby.vercel.app/user/new/${token}`,
     };
