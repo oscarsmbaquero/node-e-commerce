@@ -348,7 +348,8 @@ const resetPassword = async (req, res, next) => {
       //text: `https://angular-e-commerce-ruby.vercel.app/user/new${token}`
       text: `Hola  ${previousUser.user}. Adjuntamos enlace para recuperar tu contraseña.
       Este enlace caduca en 1 hora.
-      https://angular-e-commerce-ruby.vercel.app/user/new/${token}`,
+      https://angular-e-commerce-ruby.vercel.app/user/new/${token}.
+      Un saludo desde el equipo de Coexist`,
     };
 
     const transport = nodemailer.createTransport(config);
