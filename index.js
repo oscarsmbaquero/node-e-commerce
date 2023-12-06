@@ -13,6 +13,7 @@ import { productRoutes } from "./server/api/routes/products.routes.js";
 import { userRoutes } from "./server/api/routes/users.routes.js";
 import { ventasRoutes } from "./server/api/routes/ventas.routes.js";
 import { paypalRoutes } from "./server/api/routes/paypal.routes.js";
+import { gastosRoutes } from "./server/api/routes/gastos.routes.js";
 
 //creo servidor express
 const server = express();
@@ -38,6 +39,7 @@ server.use("/products", productRoutes);
 server.use("/users", userRoutes);
 server.use("/ventas", ventasRoutes);
 server.use('/paypal', paypalRoutes);
+server.use("/gastos", gastosRoutes);
 
 
 

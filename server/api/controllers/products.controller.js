@@ -18,7 +18,7 @@ const getProducts = async (req, res, next) => {
     //   //  message : httpStatusCode[200],
     //   data: { avisos: avisos },
     // });
-    res.send(products);
+    //res.send(products);
   } catch (error) {
     return next(error);
   }
@@ -68,7 +68,6 @@ const buyProducts = async (req, res, next) => {
       salePrice: precioVenta,
       estadoPedido: "En proceso",
     });
-    console.log(newSale,'newSale');
     // Guardar la venta en la base de datos
     const newPedidoCliente = await newSale.save();
     await User.updateOne(
@@ -148,8 +147,7 @@ function generateOrderNumber() {
 }
 
 const createProduct = async (req, res, next) => {
-  console.log("Entro",req.file);
-  console.log(req.file_url, 46);
+  console.log(req.body);
   try {
     const NewProduct = new Products({
       name: req.body.name,
