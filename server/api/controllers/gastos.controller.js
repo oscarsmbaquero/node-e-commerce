@@ -48,9 +48,12 @@ const gastosDetail = async (req, res, next) => {
 const createGastos = async (req, res, next) => {
   console.log(req.body)
 }
+
+
 const createGasto = async (req, res, next) => {
-  //console.log("Entro",req.file);
-  console.log(req.body.concepto, 46,'entro');
+  console.log("Entro",req.file);
+ 
+    //console.log("Entro", req.body);
   try {
     const NewGasto = new Gastos({
       nameClient: req.body.nameClient,
@@ -62,11 +65,12 @@ const createGasto = async (req, res, next) => {
       price: req.body.price,
       iva: req.body.iva,
       priceFinal: req.body.priceFinal,
-      date: req.body.date
+      date: req.body.date,
+      image: req.file_url,
 
       //tipo:req.body.tipo,
     });
-    console.log(newGastoDB,'new');
+    //console.log(NewGasto,'new');
     const newGastoDB = await NewGasto.save();
     return res.json({
       status: 201,
@@ -77,6 +81,7 @@ const createGasto = async (req, res, next) => {
     return next(error);
   }
 };
+
 
 
 export { getGastos, createGasto };

@@ -5,11 +5,11 @@ const gastosSchema = new Schema(
   {
     // name: { type: String, required: true },    
     // description: { type: String, required: true },
-    // image: { 
-    //   data: Buffer,
-    //   contentType: String,
-    //   required: false
-    // },
+    image: { 
+      data: Buffer,
+      contentType: String,
+      required: false
+    },
     //favorite: { type: Boolean, required: false },
     nameClient: { type: String, required: true },
     numberIssue: { type: String, required: true },
@@ -20,6 +20,7 @@ const gastosSchema = new Schema(
     iva: { type: Number, required: false },
     priceFinal: { type: Number, required: false },
     date: { type: Date, required: false },
+    image: { type: String, required: false },
     // anio:{ type:Number, required: true }
   },
   {

@@ -5,7 +5,6 @@ import { Ventas } from "../models/Ventas.Model.js";
 import { ObjectId } from "mongodb";
 
 const getProducts = async (req, res, next) => {
-  console.log("Entroxxxxxxxxxxxxx");
   try {
     const products = await Products.find();
     //.populate({ path: "numeroPedido", select: "unidades" });
