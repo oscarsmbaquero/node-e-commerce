@@ -48,17 +48,17 @@ const buyProducts = async (req, res, next) => {
   try {
     const orderNumber = generateOrderNumber(); // Generar un número de pedido único para la compra
     const userBuy = req.body.idUser;
-    console.log(req.body,789);
     const productsToInsert = req.body.venta.products.map((productData) => {
       return {
         name: productData.name,
         description: productData.description,
         unidades: productData.unidadesCompra,
         precio: productData.precio,
+        //unidadesVendidas: productData.unidadesCompra,
       };
     });
+    console.log(productsToInsert,'insert');
     const precioVenta = req.body.venta.salePrice;
-    console.log(precioVenta,62);
     // Crear una venta con el número de pedido
     const newSale = new Ventas({
       orderNumber: orderNumber,
@@ -79,16 +79,26 @@ const buyProducts = async (req, res, next) => {
     // Itero por los productos para extraer el id y las unidades
     for (const productData of req.body.venta.products) {
       const productId = productData._id;
+      console.log(productData.unidadesVendidas,82);
       const unidadesToSubtract = productData.unidadesCompra;
+      const unidadesToSoldSuma = productData.unidadesCompra;
+      console.log(unidadesToSoldSuma,123465);
       //Busco en la base de datos cada producto
       const productoActual = await Products.findById(productId);
+      console.log(productoActual,86);
       //el producto que encuentre con cada id
       if (productoActual) {
+        if(!productoActual.unidadesVendidas){
+          productoActual.unidadesVendidas = 0
+        }
         // Le resto las unidades
         const unidadesRestantes = productoActual.unidades - unidadesToSubtract;
+        const unidadesVendidasTotal =productoActual.unidadesVendidas +  unidadesToSoldSuma;
         // Actualizo las unidades en la base de datos
+        console.log(unidadesVendidasTotal,'total');
         await Products.findByIdAndUpdate(productId, {
           unidades: unidadesRestantes,
+          unidadesVendidas: unidadesVendidasTotal
         });
       }
     }

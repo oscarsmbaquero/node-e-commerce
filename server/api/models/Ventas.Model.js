@@ -6,6 +6,7 @@ const productSchema = new Schema({
   description: { type: String, required: true },
   unidades: { type: Number, required: true },
   precio: { type: Number, required: true },
+  //unidadesVendidas: { type: Number, required: true },
 });
 
 const saleSchema = new Schema(

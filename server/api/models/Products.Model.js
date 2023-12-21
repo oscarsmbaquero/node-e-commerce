@@ -15,6 +15,7 @@ const productsSchema = new Schema(
     precio: { type: Number, required: true },
     pcompra: { type: Number, required: false },
     image: { type: String, required: false },
+    unidadesVendidas: { type: Number, required:false}
     // anio:{ type:Number, required: true }
   },
   {
