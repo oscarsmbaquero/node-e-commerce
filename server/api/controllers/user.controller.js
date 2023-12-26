@@ -6,13 +6,11 @@ import { httpStatusCode } from "../../utils/httpStatusCode.js";
 //import sendMail from "./sendMail.js";
 import nodemailer from "nodemailer";
 const loginUser = async (req, res, next) => {
+  console.log('Entro');
   try {
     const { body } = req;
-    console.log(body.password, 60);
     // Comprobar email
-    const user = await User.findOne({ user: body.user });
-    console.log(user, 63);
-
+    const user = await User.findOne({ mail: body.mail });
     // Comprobar password
     const isValidPassword = await bcrypt.compare(body.password, user.password);
     // Control de LOGIN
