@@ -9,7 +9,8 @@ const Orders = ('/', async (req, res, next) => {
    try {
     const { userId } = req.params;
     console.log(userId);
-    const pedidos = await Ventas.find();
+    const pedidos = await Ventas.find().populate([{
+      path: "userBuy", select: ""}]);
     return res.status(200).json(pedidos);
     //  return res.json({
     //   //  status : 200,
